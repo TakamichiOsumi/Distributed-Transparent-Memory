@@ -22,8 +22,8 @@
  * Each process will listen on IP 127.0.0.1 and bind to UDP and TCP port numbers.
  * Node i knows the node j's ip address and UDP port no, where j = i + 1.
  * Originator is a node on which user has issued PUT/GET request, while target node
- * is the one which is responsible for storing K and X pair in its local hash based
- * on the find_node macro.
+ * is the one which is responsible for storing K and X pair in its local hash, based
+ * on the value of the find_node macro.
  *
  * User can perform two operations on each node:
  *
@@ -131,7 +131,7 @@ static int my_hash_index = 0;
  * When user inputs one new pair of data, the originator node
  * keeps the 'x' value until the target node stores the value.
  *
- * Both to get the user input and to send the reply for WHAT_X message
+ * Both to get the user input and to send the reply for 'WHAT_X' message
  * are conducted in different iterations of select system call.
  * Then, this value should be global.
  */
@@ -317,7 +317,7 @@ dtm_send_udp_message(int udp_socket_fd, ApplyMsg *udp_msg){
     }
 }
 
-/* Send WHAT_X message and receive the orignator's PUT_REPLY_X message */
+/* Send 'WHAT_X' msg and receive the orignator's 'PUT_REPLY_X' msg */
 static void
 dtm_ask_what_x(ApplyMsg *udp_msg){
     struct sockaddr_in tcp_dest;
@@ -477,7 +477,7 @@ dtm_read_received_udp_msg(int udp_socket_fd, ApplyMsg *msg){
 		 0,
 		 (struct sockaddr *)&server_addr,
 		 &addr_len) < 0){
-	fprintf(stderr, "Couldn't receive any data.\n");
+	fprintf(stderr, "Couldn't receive any data\n");
 	exit(-1);
     }else{
 	ApplyMsg *tmp;
@@ -719,9 +719,9 @@ dtm_run_loop(int argc, char **argv){
 
 			val = dtm_search_from_hash(k);
 			if (val == -1)
-			    printf("This node is the target but doesn't know the value yet\n");
+			    printf("The data hasn't been registered yet\n");
 			else
-			    printf("The value for key = %d: %d\n", k, val);
+			    printf("The value for key = %d : %d\n", k, val);
 		    }else{
 			ApplyMsg first_get_forward;
 
@@ -736,7 +736,7 @@ dtm_run_loop(int argc, char **argv){
 		    fprintf(stderr, "Invalid fd operation has been detected. Retry...\n");
 	    }
 	}else{
-	    fprintf(stderr, "Unknown\n");
+	    fprintf(stderr, "Unknown fd has been invoked\n");
 	}
     }
 }
