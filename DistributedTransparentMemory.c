@@ -13,8 +13,7 @@
 #include <unistd.h>
 
 /*
- * Distributed Transparent Memory Project for Udemy course
- * "Linux Inter Process Communication (IPC) from Scratch in C".
+ * Distributed Transparent Memory Project
  *
  * Note that this project is written just for learning purpose.
  *
