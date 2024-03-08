@@ -54,6 +54,11 @@ typedef enum MsgID {
     GET_REPLY_X
 } MsgID;
 
+typedef enum UserChoice {
+    PUT = 1,
+    GET = 2
+} UserChoice;
+
 typedef struct ApplyMsg {
     unsigned int msg_id;
     unsigned int k;
@@ -279,16 +284,17 @@ dtm_get_positive_integer(char *prompt){
 }
 
 static void
-dtm_process_user_input(int *op, int *k, int *v){
+dtm_process_user_input(UserChoice *op, int *k, int *v){
     do{
 	*op = dtm_get_positive_integer("Enter the number 1 or 2.\n"
 				       "1: PUT <key> <value>\n"
 				       "2: GET <key>\n");
-    }while((*op != 1) && (*op != 2));
+    }while((*op != PUT) && (*op != GET));
 
     *k = dtm_get_positive_integer("<key> : ");
+
     /* PUT */
-    if (*op == 1)
+    if (*op == PUT)
 	*v = dtm_get_positive_integer("<value> : ");
 }
 
@@ -687,7 +693,8 @@ dtm_run_loop(int argc, char **argv){
 		}
 	    }
 	}else if (FD_ISSET(0, &readfds)){
-	    int user_op, k, v;
+	    UserChoice user_op;
+	    int k, v;
 
 	    /*
 	     * Clear the stdin stream characters.
@@ -697,7 +704,7 @@ dtm_run_loop(int argc, char **argv){
 	    dtm_clear_stdin_stream_chars();
 	    dtm_process_user_input(&user_op, &k, &v);
 	    switch(user_op){
-		case 1:
+		case PUT:
 		    if (find_node(k) == my_node_id){
 			dtm_store_hash_entry(k, v);
 		    }else{
@@ -712,7 +719,7 @@ dtm_run_loop(int argc, char **argv){
 					     &first_put_forward);
 		    }
 		    break;
-		case 2:
+		case GET:
 		    if (find_node(k) == my_node_id){
 			int val;
 
