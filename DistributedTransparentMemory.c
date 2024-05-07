@@ -43,6 +43,26 @@
  * of UDP messages arrive at the target node. The arrival of the message makes the target node
  * establish TCP connection with the originator of GET request by 'GET_REPLY_X' message and
  * the target node shows the fetched X value to the user.
+ *
+ * An example of DTM configuration setup is described below.
+ *
+ * From left to right, column means
+ * a. own node IP,
+ * b. own node UDP port number,
+ * c. successor node UDP port number and
+ * d. own node TCP port number.
+ *
+ * | --------- | ----- | ----- | ----- |
+ * | 127.0.0.1 | 60000 | 60001 | 50000 |
+ * | 127.0.0.1 | 60001 | 60002 | 50001 |
+ * | 127.0.0.1 | 60002 | 60003 | 50002 |
+ * | 127.0.0.1 | 60003 | 60004 | 50003 |
+ * | 127.0.0.1 | 60005 | 60006 | 50004 |
+ * | 127.0.0.1 | 60006 | 60000 | 50005 |
+ * |-----------------------------------|
+ *
+ * Note that the last node points to the first node
+ * UDP port number.
  */
 typedef enum MsgID {
     /* UDP */
